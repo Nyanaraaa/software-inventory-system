@@ -4,20 +4,28 @@ import prisma from "@/lib/prisma";
 import type { Item, ItemUpdate } from "@/lib/types";
 
 const createProduct = async (data: Item) => {
-  return prisma.product.create({
+  return prisma.item.create({
     data,
   });
 };
 
 const getProducts = async (offset: number = 0, limit: number = 10) => {
-  return prisma.product.findMany({
+  return prisma.item.findMany({
     skip: offset,
     take: limit,
   });
 };
 
+const getProduct = async (id: number) => {
+  return prisma.item.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
 const updateProduct = async (id: number, data: ItemUpdate) => {
-  return prisma.product.update({
+  return prisma.item.update({
     where: {
       id,
     },
@@ -26,11 +34,11 @@ const updateProduct = async (id: number, data: ItemUpdate) => {
 };
 
 const deleteProduct = async (id: number) => {
-  return prisma.product.delete({
+  return prisma.item.delete({
     where: {
       id,
     },
   });
 };
 
-export { createProduct, getProducts, updateProduct, deleteProduct };
+export { createProduct, getProducts, getProduct, updateProduct, deleteProduct };

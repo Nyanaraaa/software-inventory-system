@@ -23,6 +23,7 @@ model Item {
   purchaseDate     DateTime
   expirationDate   DateTime
   attachment       String
+  itemType         ItemType
   lastReminder     DateTime?
   createdAt        DateTime  @default(now())
 }

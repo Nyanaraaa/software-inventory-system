@@ -1,11 +1,14 @@
+import { ItemType } from "@prisma/client";
+
 type Item = {
   name: string;
   description: string;
   owner: string;
   ownerEmail: string;
-  subscriptionDate: Date;
+  subscriptionDate?: Date;
   purchaseDate: Date;
   expirationDate: Date;
+  itemType: ItemType;
   attachment: string;
 };
 
@@ -15,9 +18,19 @@ type ItemUpdate = {
   owner?: string;
   ownerEmail?: string;
   subscriptionDate?: Date;
-  purchaseDate?: Date;
-  expirationDate?: Date;
+  purchaseDate: Date;
+  itemType: ItemType;
+  expirationDate: Date;
   attachment?: string;
 };
 
-export type { Item, ItemUpdate };
+type DisplayedItems = {
+  id: number;
+  name: string;
+  owner: string;
+  subscriptionDate?: Date | null;
+  expirationDate: Date;
+  type: string;
+};
+
+export type { Item, ItemUpdate, DisplayedItems };
