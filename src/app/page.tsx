@@ -4,10 +4,10 @@ import CreateItemModal from "@/components/modal";
 export default function Home() {
 
   const data = [
-    { name: "kent", owner: "Jed", subscriptionDate: "10-25-32", expirationDate: "10-26-32", type: "software" },
-    { name: "kent", owner: "Jed", subscriptionDate: "10-25-32", expirationDate: "10-26-32", type: "software" },
-    { name: "kent", owner: "Jed", subscriptionDate: "10-25-32", expirationDate: "10-26-32", type: "software" },
-    { name: "kent", owner: "Jed", subscriptionDate: "10-25-32", expirationDate: "10-26-32", type: "software" }
+    { name: "Adobe", owner: "CICT", subscriptionDate: "10-25-32", expirationDate: "10-26-32", type: "software" },
+    { name: "Microsoft Word", owner: "CICT", subscriptionDate: "10-25-32", expirationDate: "10-26-32", type: "software" },
+    { name: "Vs Code", owner: "CICT", subscriptionDate: "10-25-32", expirationDate: "10-26-32", type: "software" },
+    { name: "Github", owner: "CICT", subscriptionDate: "10-25-32", expirationDate: "10-26-32", type: "software" }
   ]
 
   return (
