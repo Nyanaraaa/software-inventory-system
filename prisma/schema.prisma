@@ -13,17 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Software {
+model Item {
   id               Int       @id @default(autoincrement())
   name             String
   description      String
   owner            String
-  ownerEmail       String?
-  subscriptionDate DateTime
+  ownerEmail       String
+  subscriptionDate DateTime?
   purchaseDate     DateTime
   expirationDate   DateTime
-  licenseKey       String
   attachment       String
   lastReminder     DateTime?
   createdAt        DateTime  @default(now())
+}
+
+enum ItemType {
+  SOFTWARE
+  HARDWARE
 }
