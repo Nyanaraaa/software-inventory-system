@@ -1,7 +1,31 @@
-import Image from "next/image";
+"use client"
+
+import { useState } from "react";
 import CreateItemModal from "@/components/modal";
+import EditItemModal from "@/components/editmodal";
+
 
 export default function Home() {
+
+  const [open, setOPen] = useState(false);
+
+  const handleClose = ()=> {
+    setOPen(false)
+  }
+
+  const handleOpen = ()=> {
+    setOPen(true)
+  }
+
+  const [editOpen, setEditOpen] =useState(false);
+
+  const handleEditClose =() => {
+    setEditOpen(false)
+  }
+
+  const handleEditOpen = () => {
+    setEditOpen(true)
+  }
 
   const data = [
     { name: "Adobe", owner: "CICT", subscriptionDate: "10-25-32", expirationDate: "10-26-32", type: "software" },
@@ -12,10 +36,11 @@ export default function Home() {
 
   return (
     <div>
-      <CreateItemModal />
       <div className="w-[95%] flex flex-row-reverse mb-2">
-      <button type="button" className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5
+      <button onClick={handleOpen} type="button" className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5
        me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Add Item</button>
+         <CreateItemModal onClose={handleClose} isOpen={open}/>
+         <EditItemModal onClose={handleEditClose} isOpen={editOpen}/>
       </div>
       <div className="flex justify-center">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-[90%] ">
@@ -62,7 +87,7 @@ export default function Home() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex gap-2">
-                      <button className="bg-blue-500 rounded p-1 "><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffff" fill="none">
+                      <button onClick={handleEditOpen}className="bg-blue-500 rounded p-1 "><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffff" fill="none">
                         <path d="M15.2141 5.98239L16.6158 4.58063C17.39 3.80646 18.6452 3.80646 19.4194 4.58063C20.1935 5.3548 20.1935 6.60998 19.4194 7.38415L18.0176 8.78591M15.2141 5.98239L6.98023 14.2163C5.93493 15.2616 5.41226 15.7842 5.05637 16.4211C4.70047 17.058 4.3424 18.5619 4 20C5.43809 19.6576 6.94199 19.2995 7.57889 18.9436C8.21579 18.5877 8.73844 18.0651 9.78375 17.0198L18.0176 8.78591M15.2141 5.98239L18.0176 8.78591" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M11 20H17" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
                       </svg></button>
