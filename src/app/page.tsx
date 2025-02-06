@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import CreateItemModal from "@/components/modal";
 import EditItemModal from "@/components/editmodal";
 import { getProducts, deleteProduct } from "@/actions/products";
+import { Button } from "@/components/ui/button"
 import type { DisplayedItems } from "@/lib/types";
 
 export default function Home() {
@@ -38,15 +39,10 @@ export default function Home() {
 
   return (
     <div>
+       <div className="w-full font-bold h-20 flex items-center justify-center text-2xl"> Inventory System </div>
       <div className="w-[95%] flex flex-row-reverse mb-2">
-        <button
-          onClick={() => setOpened({ ...opened, createModal: true })}
-          type="button"
-          className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-md text-sm px-5 py-2.5
-       me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-        >
-          Add Item
-        </button>
+       
+        <Button   onClick={() => setOpened({ ...opened, createModal: true })} variant="secondary" className="bg-green-500 hover:bg-green-700 text-white">Add item</Button>
         <CreateItemModal
           onClose={() => setOpened({ ...opened, createModal: false })}
           isOpen={opened.createModal}
