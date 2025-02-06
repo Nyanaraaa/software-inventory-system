@@ -6,7 +6,7 @@ type Item = {
   owner: string;
   ownerEmail: string;
   subscriptionDate?: Date;
-  purchaseDate: Date;
+  purchaseDate?: Date;
   expirationDate: Date;
   itemType: ItemType;
   attachment: string;
@@ -18,9 +18,9 @@ type ItemUpdate = {
   owner?: string;
   ownerEmail?: string;
   subscriptionDate?: Date;
-  purchaseDate: Date;
-  itemType: ItemType;
-  expirationDate: Date;
+  purchaseDate?: Date;
+  itemType?: ItemType;
+  expirationDate?: Date;
   attachment?: string;
 };
 
@@ -28,8 +28,9 @@ type DisplayedItems = {
   id: number;
   name: string;
   owner: string;
-  subscriptionDate?: Date | null;
-  expirationDate: Date;
+  subscriptionDate?: Date;
+  purchaseDate?: Date;
+  expirationDate?: Date;
   type: string;
 };
 
