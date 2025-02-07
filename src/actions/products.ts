@@ -9,7 +9,7 @@ const createProduct = async (data: Item) => {
   });
 };
 
-const getProducts = async (offset: number = 0, limit: number = 10) => {
+const getProducts = async (offset?: number, limit?: number) => {
   return prisma.item.findMany({
     skip: offset,
     take: limit,
@@ -22,7 +22,7 @@ const getProduct = async (id: number) => {
       id,
     },
   });
-}
+};
 
 const updateProduct = async (id: number, data: ItemUpdate) => {
   return prisma.item.update({

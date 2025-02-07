@@ -20,7 +20,7 @@ model Item {
   owner            String
   ownerEmail       String
   subscriptionDate DateTime?
-  purchaseDate     DateTime
+  purchaseDate     DateTime?
   expirationDate   DateTime
   attachment       String
   itemType         ItemType
