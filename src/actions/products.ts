@@ -16,6 +16,18 @@ const getProducts = async (offset?: number, limit?: number) => {
   });
 };
 
+const getExpiringProducts = async () => {
+  const oneMonth = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+
+  return prisma.item.findMany({
+    where: {
+      expirationDate: {
+        lte: oneMonth
+      }
+    }
+  })
+}
+
 const getProduct = async (id: number) => {
   return prisma.item.findUnique({
     where: {
@@ -41,4 +53,4 @@ const deleteProduct = async (id: number) => {
   });
 };
 
-export { createProduct, getProducts, getProduct, updateProduct, deleteProduct };
+export { createProduct, getProducts, getExpiringProducts, getProduct, updateProduct, deleteProduct };
