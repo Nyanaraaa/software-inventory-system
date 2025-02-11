@@ -4,7 +4,7 @@ import CreateItemModal from "@/components/add-modal";
 import EditItemModal from "@/components/edit-modal";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { getProducts, deleteProduct } from "@/actions/products";
+import { getItems, deleteItem } from "@/actions/items";
 import { Button } from "@/components/ui/button";
 import { truncate } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,7 @@ export default function Home() {
 
   const updateData = async () => {
     const temp = [];
-    const res = await getProducts(page * 10, 10);
+    const res = await getItems(page * 10, 10);
 
     for (const e of res) {
       temp.push({
@@ -64,7 +64,9 @@ export default function Home() {
             onChange={(e) => {
               setDisplayData(
                 data.filter((item) =>
-                  item.name.toLowerCase().includes(e.target.value.toLowerCase())
+                  item.name
+                    .toLowerCase()
+                    .includes(e.target.value.toLowerCase())
                 )
               );
             }}
@@ -83,16 +85,25 @@ export default function Home() {
                 <th scope="col" className="px-6 py-3">
                   Owner
                 </th>
-                <th scope="col" className="px-6 py-3 hidden md:table-cell">
+                <th
+                  scope="col"
+                  className="px-6 py-3 hidden md:table-cell"
+                >
                   Purchase Date (Hardware)
                 </th>
-                <th scope="col" className="px-6 py-3 hidden md:table-cell">
+                <th
+                  scope="col"
+                  className="px-6 py-3 hidden md:table-cell"
+                >
                   Subscription Date (Software)
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Expiration Date
                 </th>
-                <th scope="col" className="px-6 py-3 hidden sm:table-cell">
+                <th
+                  scope="col"
+                  className="px-6 py-3 hidden sm:table-cell"
+                >
                   Type
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -114,17 +125,23 @@ export default function Home() {
                       >
                         {truncate(e.name, 20)}
                       </th>
-                      <td className="px-6 py-2">{e.owner}</td>
-                      <td className="px-6 py-2 hidden md:table-cell">
-                        {e.purchaseDate?.toLocaleDateString() ?? "N/A"}
+                      <td className="px-6 py-2">
+                        {e.owner}
                       </td>
                       <td className="px-6 py-2 hidden md:table-cell">
-                        {e.subscriptionDate?.toLocaleDateString() ?? "N/A"}
+                        {e.purchaseDate?.toLocaleDateString() ??
+                          "N/A"}
+                      </td>
+                      <td className="px-6 py-2 hidden md:table-cell">
+                        {e.subscriptionDate?.toLocaleDateString() ??
+                          "N/A"}
                       </td>
                       <td
                         className="px-6 py-2"
                         style={{
-                          color: textDateColor(e.expirationDate),
+                          color: textDateColor(
+                            e.expirationDate
+                          ),
                         }}
                       >
                         {e.expirationDate?.toLocaleDateString()}
@@ -134,12 +151,21 @@ export default function Home() {
                       </td>
                       <td className="px-6 py-2 text-right">
                         <div className="flex gap-2">
-                          <EditItemModal id={e.id} updateData={updateData} />
+                          <EditItemModal
+                            id={e.id}
+                            updateData={updateData}
+                          />
                           <Button
                             onClick={() => {
-                              deleteProduct(e.id)
-                                .then(() => updateData())
-                                .catch((err) => console.error(err));
+                              deleteItem(e.id)
+                                .then(() =>
+                                  updateData()
+                                )
+                                .catch((err) =>
+                                  console.error(
+                                    err
+                                  )
+                                );
                             }}
                             className="bg-red-500 hover:bg-red-700 rounded p-2"
                           >
@@ -184,7 +210,10 @@ export default function Home() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={7} className="px-6 py-2 text-center">
+                  <td
+                    colSpan={7}
+                    className="px-6 py-2 text-center"
+                  >
                     No data to show
                   </td>
                 </tr>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getProduct, updateProduct } from "@/actions/products";
+import { getItem, updateItem } from "@/actions/items";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
@@ -39,7 +39,7 @@ export default function EditItemModal({
   });
 
   const handleSubmit = async () => {
-    await updateProduct(id, {
+    await updateItem(id, {
       name: data.productName,
       owner: data.owner,
       expirationDate: data.expirationDate,
@@ -56,7 +56,7 @@ export default function EditItemModal({
 
   useEffect(() => {
     const updateExisting = async () => {
-      const res = await getProduct(id);
+      const res = await getItem(id);
 
       setData({
         productName: res!.name,
