@@ -84,7 +84,7 @@ export default function CreateItemModal({
                         <DialogTitle>Create New Product</DialogTitle>
                         <DialogDescription>
                             Make changes to your profile here. Click save when
-                            you're done.
+                            you&apos;re done.
                         </DialogDescription>
                     </DialogHeader>
                     <form id="create-item" action={postProduct}>
@@ -209,6 +209,7 @@ export default function CreateItemModal({
                                             <DatePicker
                                                 date={data.purchaseDate}
                                                 setDate={(v?: Date) => {
+                                                    console.log(v)
                                                     setData({
                                                         ...data,
                                                         purchaseDate: v,

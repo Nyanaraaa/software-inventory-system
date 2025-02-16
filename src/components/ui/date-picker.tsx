@@ -95,7 +95,7 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
       <PopoverContent className="w-auto p-0" align="start">
         <div className="flex justify-between p-2 space-x-1">
           <Select onValueChange={handleYearChange} value={year.toString()}>
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="w-[130px]">
               <SelectValue placeholder="Year" />
             </SelectTrigger>
             <SelectContent>
@@ -107,7 +107,7 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
             </SelectContent>
           </Select>
           <Select onValueChange={handleMonthChange} value={month.toString()}>
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="w-[130px]">
               <SelectValue placeholder="Month" />
             </SelectTrigger>
             <SelectContent>
@@ -128,7 +128,6 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
             setMonth(newMonth.getMonth());
             setYear(newMonth.getFullYear());
           }}
-          initialFocus
         />
       </PopoverContent>
     </Popover>
