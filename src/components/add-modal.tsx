@@ -18,6 +18,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ItemType } from "@prisma/client";
 
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
 export default function CreateItemModal({
     updateData,
 }: {
@@ -34,6 +38,9 @@ export default function CreateItemModal({
         attachment: "",
         ownerEmail: "",
         productDescription: "",
+        licenseKey: "",
+        numberofLicenses: 0,
+        requisitionNumber: "",
     });
 
     const postProduct = async () => {
@@ -50,6 +57,9 @@ export default function CreateItemModal({
                     ? ItemType.SOFTWARE
                     : ItemType.HARDWARE,
             attachment: data.attachment,
+            licenseKey: data.licenseKey,
+            numberOfLicenses: data.numberofLicenses,
+            requisitionNumber: data.requisitionNumber,
         });
 
         setData({
@@ -62,6 +72,9 @@ export default function CreateItemModal({
             attachment: "",
             ownerEmail: "",
             productDescription: "",
+            licenseKey: "",
+            numberofLicenses: 0,
+            requisitionNumber: "",
         });
 
         updateData();
@@ -74,17 +87,27 @@ export default function CreateItemModal({
                 <DialogTrigger asChild>
                     <Button
                         variant="secondary"
-                        className="bg-green-500 hover:bg-green-700 text-white"
+                        className="bg-black hover:bg-gray-800 text-white rounded p-2"
                     >
-                        Add item
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="w-8 h-8"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
+                                clipRule="evenodd"
+                            />
+                        </svg>
+                        Add New Product
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[625px] max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Create New Product</DialogTitle>
                         <DialogDescription>
-                            Make changes to your profile here. Click save when
-                            you&apos;re done.
                         </DialogDescription>
                     </DialogHeader>
                     <form id="create-item" action={postProduct}>
@@ -196,6 +219,7 @@ export default function CreateItemModal({
                                                         subscriptionDate: v,
                                                     });
                                                 }}
+                                                isExpiration={false}
                                             />
                                         </div>
                                     ) : (
@@ -215,6 +239,7 @@ export default function CreateItemModal({
                                                         purchaseDate: v,
                                                     });
                                                 }}
+                                                isExpiration={false}
                                             />
                                         </div>
                                     )}
@@ -233,8 +258,57 @@ export default function CreateItemModal({
                                                     expirationDate: v,
                                                 });
                                             }}
+                                            isExpiration={true}
                                         />
                                     </div>
+                                    {data.category === "software" && (
+                                        <>
+                                            <div className="col-span-2">
+                                                <Label
+                                                    htmlFor="license-key"
+                                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                >
+                                                    License Key
+                                                </Label>
+                                                <Input
+                                                    onChange={(e) =>
+                                                        setData({
+                                                            ...data,
+                                                            licenseKey: e.target.value,
+                                                        })
+                                                    }
+                                                    type="text"
+                                                    name="license-key"
+                                                    id="license-key"
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    placeholder="Enter license key"
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <Label
+                                                    htmlFor="number-of-licenses"
+                                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                >
+                                                    Number of Licenses
+                                                </Label>
+                                                <Input
+                                                    onChange={(e) =>
+                                                        setData({
+                                                            ...data,
+                                                            numberofLicenses: parseInt(e.target.value) || 0,
+                                                        })
+                                                    }
+                                                    type="number"
+                                                    name="number-of-licenses"
+                                                    id="number-of-licenses"
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                                    placeholder="Enter number of licenses"
+                                                    required
+                                                />
+                                            </div>
+                                        </>
+                                    )}
                                 </>
                             )}
                             <div className="col-span-2">
@@ -259,7 +333,28 @@ export default function CreateItemModal({
                                     required
                                 />
                             </div>
-
+                            <div className="col-span-2">
+                                <Label
+                                    htmlFor="requisition-number"
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >
+                                    Requisition Number
+                                </Label>
+                                <Input
+                                    onChange={(e) =>
+                                        setData({
+                                            ...data,
+                                            requisitionNumber: e.target.value,
+                                        })
+                                    }
+                                    type="text"
+                                    name="requisition-number"
+                                    id="requisition-number"
+                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                    placeholder="Enter requisition number"
+                                    required
+                                />
+                            </div>
                             <div className="col-span-2">
                                 <Label
                                     htmlFor="description"
@@ -286,9 +381,9 @@ export default function CreateItemModal({
                         <Button
                             type="submit"
                             form="create-item"
-                            className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                             className="text-white inline-flex items-center  bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                         >
-                            Save changes
+                            Submit
                         </Button>
                     </DialogFooter>
                 </DialogContent>

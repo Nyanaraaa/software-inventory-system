@@ -21,9 +21,10 @@ import {
 interface DatePickerProps {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
+  isExpiration: boolean;
 }
 
-export function DatePicker({ date, setDate }: DatePickerProps) {
+export function DatePicker({ date, setDate, isExpiration }: DatePickerProps) {
   const [month, setMonth] = React.useState<number>(
     date ? date.getMonth() : new Date().getMonth()
   );
@@ -33,10 +34,19 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
 
   const years = React.useMemo(() => {
     const currentYear = new Date().getFullYear();
-    return Array.from(
-      { length: currentYear - 1900 + 1 },
-      (_, i) => currentYear - i
-    );
+    if (isExpiration) {
+      return Array.from(
+        { length: 100 }, // Number of future years you'd like to allow
+        (_, i) => currentYear + i
+      );
+    } else {
+      // If it's for purchase, generate past years
+      return Array.from(
+        { length: currentYear - 1990 + 1 },
+        (_, i) => currentYear - i
+      );
+    }
+  
   }, []);
 
   const months = React.useMemo(() => {
