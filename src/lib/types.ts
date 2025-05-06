@@ -10,6 +10,9 @@ type Item = {
   expirationDate: Date;
   itemType: ItemType;
   attachment: string;
+  licenseKey?: string;
+  numberofLicenses?: number;
+  requisitionNumber?: string
 };
 
 type ItemUpdate = {
@@ -17,21 +20,31 @@ type ItemUpdate = {
   description?: string;
   owner?: string;
   ownerEmail?: string;
-  subscriptionDate?: Date;
-  purchaseDate?: Date;
+  subscriptionDate?: Date | null; // Allow null
+  purchaseDate?: Date | null; // Allow null
   itemType?: ItemType;
-  expirationDate?: Date;
+  expirationDate?: Date | null; // Allow null
   attachment?: string;
+  licenseKey?: string;
+  numberOfLicenses?: number;
+  requisitionNumber?: string;
 };
 
 type DisplayedItems = {
   id: number;
   name: string;
+  description: string;
   owner: string;
-  subscriptionDate?: Date;
-  purchaseDate?: Date;
-  expirationDate?: Date;
+  ownerEmail?: string; // Add this field
+  subscriptionDate?: Date | null;
+  purchaseDate?: Date | null;
+  expirationDate?: Date | null;
+  attachment?: string;
+  licenseKey?: string;
+  numberOfLicenses?: number; // Add this field
+  requisitionNumber?: string; // Add this field
   type: string;
+  archived: boolean;
 };
 
 export type { Item, ItemUpdate, DisplayedItems };

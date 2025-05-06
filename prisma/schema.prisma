@@ -21,14 +21,29 @@ model Item {
   ownerEmail       String
   subscriptionDate DateTime?
   purchaseDate     DateTime?
-  expirationDate   DateTime
+  expirationDate   DateTime?
   attachment       String
   itemType         ItemType
   lastReminder     DateTime?
+  licenseKey       String?
+  numberOfLicenses Int?
+  requisitionNumber String?
+  archived         Boolean   @default(false) // Flag to mark if the item is archived
   createdAt        DateTime  @default(now())
 }
 
 enum ItemType {
   SOFTWARE
   HARDWARE
+}
+
+model Token {
+  id          Int      @id @default(autoincrement())  // Token ID
+  tokenValue  String   @unique // Mark this field as unique
+  expiresAt   DateTime // Expiration time of the token
+  revoked     Boolean  @default(false) // Flag to mark token as revoked
+  createdAt   DateTime @default(now()) // Creation time
+  updatedAt   DateTime @updatedAt // Last updated time
+  
+  @@index([tokenValue])  // Index on the token value for quick lookup
 }
