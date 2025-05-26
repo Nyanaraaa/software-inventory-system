@@ -20,10 +20,10 @@ type ItemUpdate = {
   description?: string;
   owner?: string;
   ownerEmail?: string;
-  subscriptionDate?: Date | null; // Allow null
-  purchaseDate?: Date | null; // Allow null
+  subscriptionDate?: Date | null; 
+  purchaseDate?: Date | null; 
   itemType?: ItemType;
-  expirationDate?: Date | null; // Allow null
+  expirationDate?: Date | null; 
   attachment?: string;
   licenseKey?: string;
   numberOfLicenses?: number;
@@ -35,14 +35,15 @@ type DisplayedItems = {
   name: string;
   description: string;
   owner: string;
-  ownerEmail?: string; // Add this field
+  ownerEmail?: string; 
   subscriptionDate?: Date | null;
   purchaseDate?: Date | null;
   expirationDate?: Date | null;
   attachment?: string;
   licenseKey?: string;
-  numberOfLicenses?: number; // Add this field
-  requisitionNumber?: string; // Add this field
+  licenseKeys?: { key: string; status: string }[]; 
+  numberOfLicenses?: number; 
+  requisitionNumber?: string; 
   type: string;
   archived: boolean;
 };
