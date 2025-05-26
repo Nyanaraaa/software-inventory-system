@@ -41,6 +41,7 @@ type DisplayedItems = {
   expirationDate?: Date | null;
   attachment?: string;
   licenseKey?: string;
+  licenseKeys?: { key: string; status: string }[]; // <-- Change from string to array
   numberOfLicenses?: number; // Add this field
   requisitionNumber?: string; // Add this field
   type: string;
