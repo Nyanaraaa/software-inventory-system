@@ -10,7 +10,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { AlertCircle, RefreshCw, Search, Clock, Calendar, User, Package, X, AlertTriangle } from "lucide-react"
 import DetailsModal from "@/components/item-details-modal"
 
-// Types for better type safety
 interface ExpiredProduct {
   id: number
   name: string
@@ -19,16 +18,15 @@ interface ExpiredProduct {
   daysExpired?: number
 }
 
-// Fetch expired products from the backend API
 async function fetchExpiredProducts(): Promise<ExpiredProduct[]> {
   const res = await fetch("/api/expired-products")
   if (!res.ok) throw new Error("Failed to fetch expired products")
   return res.json()
 }
 
-// Renew product API call
+
 async function renewProduct(id: number) {
-  // TODO: Implement renew logic
+
   return Promise.resolve()
 }
 
@@ -41,7 +39,6 @@ export default function ExpiredProductsModal() {
   const [searchQuery, setSearchQuery] = useState("")
   const [refreshing, setRefreshing] = useState(false)
 
-  // Calculate days since expiration for each product
   const processProducts = (products: ExpiredProduct[]): ExpiredProduct[] => {
     return products.map((product) => {
       const expirationDate = new Date(product.expirationDate)
@@ -56,14 +53,12 @@ export default function ExpiredProductsModal() {
     })
   }
 
-  // Fetch products when modal opens
   useEffect(() => {
     if (open) {
       loadProducts()
     }
   }, [open])
 
-  // Filter products when search query changes
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setFilteredProducts(expiredProducts)
@@ -109,7 +104,6 @@ export default function ExpiredProductsModal() {
     }
   }
 
-  // Get expiration severity based on days expired
   const getExpirationSeverity = (days?: number) => {
     if (!days) return "default"
     if (days > 30) return "destructive"
@@ -184,7 +178,6 @@ export default function ExpiredProductsModal() {
                     <span>Owner</span>
                   </div>
                 </TableHead>
-                {/* Removed Action column */}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -200,7 +193,6 @@ export default function ExpiredProductsModal() {
                     <TableCell>
                       <Skeleton className="h-5 w-full" />
                     </TableCell>
-                    {/* Removed Action cell */}
                   </TableRow>
                 ))
               ) : filteredProducts.length === 0 ? (
@@ -240,7 +232,6 @@ export default function ExpiredProductsModal() {
                       </div>
                     </TableCell>
                     <TableCell>{item.owner}</TableCell>
-                    {/* Removed Action cell */}
                   </TableRow>
                 ))
               )}

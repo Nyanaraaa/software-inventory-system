@@ -12,12 +12,12 @@ export async function middleware(request: NextRequest) {
 
   const authToken = request.cookies.get("authToken")?.value;
 
-  // Redirect to /login if no auth token is found
+  
   if (!authToken && request.nextUrl.pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Check if the authToken exists in the database
+  
   if (authToken) {
     const token = await fetch(`${request.nextUrl.origin}/api/auth`, {
       method: "GET",

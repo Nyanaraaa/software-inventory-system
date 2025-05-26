@@ -27,7 +27,6 @@ export default function EditLicenseStatusModal({
   const [status, setStatus] = useState(licenseKey?.status || "active")
   const [saving, setSaving] = useState(false)
 
-  // Update status when modal opens for a new licenseKey
   React.useEffect(() => {
     setStatus(licenseKey?.status || "active")
   }, [licenseKey])

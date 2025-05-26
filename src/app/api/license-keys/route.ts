@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 
-// Create a license key
+
 export async function POST(req: NextRequest) {
   const { key, status, itemId } = await req.json()
   if (!key || !itemId) {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Update license key status
+
 export async function PUT(req: NextRequest) {
   const { id, status } = await req.json()
   if (!id || !status) {

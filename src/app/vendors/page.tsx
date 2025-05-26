@@ -4,7 +4,7 @@ import type React from "react"
 import * as XLSX from "xlsx"
 
 import { useSearchParams, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -18,29 +18,58 @@ import EditVendorModal from "@/components/edit-vendor-modal"
 
 function VendorsTable({ query, page, status }: { query?: string; page?: string; status?: string }) {
   const [vendors, setVendors] = useState<any[]>([])
+  const [allVendors, setAllVendors] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [totalCount, setTotalCount] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
   const itemsPerPage = 10
   const [editModalOpen, setEditModalOpen] = useState(false)
   const [selectedVendor, setSelectedVendor] = useState<any>(null)
-  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState(query || "")
 
+  // Fetch all vendors once for client-side search
   useEffect(() => {
     setLoading(true)
     const params = new URLSearchParams()
-    if (query) params.append("query", query)
-    if (page) params.append("page", page)
-    if (status) params.append("status", status) // Add status filter
+    if (status) params.append("status", status)
     fetch(`/api/vendors?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
-        setVendors(data.vendors)
-        setTotalCount(data.totalCount)
-        setTotalPages(data.totalPages)
+        setAllVendors(data.vendors)
         setLoading(false)
       })
-  }, [query, page, status])
+  }, [status])
+
+  // Filter vendors on search
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setVendors(allVendors)
+      setTotalCount(allVendors.length)
+      setTotalPages(Math.ceil(allVendors.length / itemsPerPage))
+      return
+    }
+    const lower = searchQuery.toLowerCase()
+    const filtered = allVendors.filter(
+      (vendor: any) =>
+        vendor.name.toLowerCase().includes(lower) ||
+        (vendor.contact && vendor.contact.toLowerCase().includes(lower)) ||
+        (vendor.email && vendor.email.toLowerCase().includes(lower))
+    )
+    setVendors(filtered)
+    setTotalCount(filtered.length)
+    setTotalPages(Math.ceil(filtered.length / itemsPerPage))
+  }, [searchQuery, allVendors])
+
+  // Pagination
+  const paginatedVendors = vendors.slice(
+    ((Number(page) || 1) - 1) * itemsPerPage,
+    (Number(page) || 1) * itemsPerPage
+  )
+
+  // Add handleSearch function
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+  }
 
   // Function to update vendor via API
   async function handleSaveVendor(updatedVendor: any) {
@@ -94,7 +123,7 @@ function VendorsTable({ query, page, status }: { query?: string; page?: string; 
     XLSX.writeFile(workbook, "vendors.xlsx")
   }
 
-  function renderRows() {
+  function renderRows(data: any[]) {
     if (loading) {
       // Render skeleton rows
       return Array.from({ length: 5 }).map((_, i) => (
@@ -105,7 +134,7 @@ function VendorsTable({ query, page, status }: { query?: string; page?: string; 
         </TableRow>
       ))
     }
-    if (vendors.length === 0) {
+    if (data.length === 0) {
       return (
         <TableRow key="empty">
           <TableCell colSpan={5} className="h-32 text-center">
@@ -118,7 +147,7 @@ function VendorsTable({ query, page, status }: { query?: string; page?: string; 
         </TableRow>
       )
     }
-    return vendors.map((vendor) => (
+    return data.map((vendor) => (
       <TableRow key={vendor.id} className="group hover:bg-muted/50 transition-colors">
         <TableCell>
           <div className="flex items-center">
@@ -204,14 +233,36 @@ function VendorsTable({ query, page, status }: { query?: string; page?: string; 
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="text-sm text-muted-foreground">
-            Showing <span className="font-medium text-foreground">{vendors.length}</span> of{" "}
-            <span className="font-medium text-foreground">{totalCount}</span> vendors
+            Showing {vendors.length} of {allVendors.length} vendors
           </p>
         </div>
         <Button variant="outline" size="sm" className="h-8 gap-1.5" onClick={handleExport}>
           <Download className="h-3.5 w-3.5" />
           Export
         </Button>
+      </div>
+
+      {/* Search bar */}
+      <div className="mb-4 w-full max-w-md">
+        <div className="relative">
+          <svg className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-4.35-4.35M16.65 10.65A5.985 5.985 0 0018 12a5.978 5.978 0 00-1.35-1.35M12 18a6 6 0 110-12 6 6 0 010 12z"
+            />
+          </svg>
+          <input
+            type="search"
+            placeholder="Search vendors..."
+            className="w-full pl-8 pr-4 py-2 rounded-md border focus:ring-1 focus:ring-primary focus:outline-none"
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
+            autoComplete="off"
+          />
+        </div>
       </div>
 
       <div className="rounded-md border overflow-hidden">
@@ -224,7 +275,7 @@ function VendorsTable({ query, page, status }: { query?: string; page?: string; 
               <TableHead className="w-[10%] text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>{renderRows()}</TableBody>
+          <TableBody>{renderRows(paginatedVendors)}</TableBody>
         </Table>
       </div>
 

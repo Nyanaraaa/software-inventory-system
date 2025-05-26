@@ -87,7 +87,7 @@ export default function EditItemModal({
           productDescription: res?.description || "",
           licenseKeys: res?.licenseKeys ? res.licenseKeys.map((lk: any) => lk.key) : [],
           requisitionNumber: res?.requisitionNumber || "",
-          vendorId: res?.vendorId ? String(res.vendorId) : "", // <-- ensure vendorId is set
+          vendorId: res?.vendorId ? String(res.vendorId) : "", 
         });
         setLicenseKeyInputs(
           res?.licenseKeys && res.licenseKeys.length > 0
@@ -99,10 +99,8 @@ export default function EditItemModal({
       });
       getVendors().then(setVendors);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, id]);
 
-  // Filter vendors based on query
   const filteredVendors =
     vendorQuery === ""
       ? vendors
@@ -171,7 +169,7 @@ export default function EditItemModal({
       licenseKeys,
       numberOfLicenses: licenseKeys.length,
       requisitionNumber: data.requisitionNumber,
-      vendorId: data.vendorId ? Number(data.vendorId) : null, // <-- ensure vendorId is passed as number or null
+      vendorId: data.vendorId ? Number(data.vendorId) : null,
     });
 
     updateData();
@@ -318,7 +316,6 @@ export default function EditItemModal({
               </div>
             </TabsContent>
 
-            {/* Product Details Tab */}
             <TabsContent value="details" className="space-y-4">
               {data.category === "software" ? (
                 <>
@@ -477,7 +474,6 @@ export default function EditItemModal({
               )}
             </TabsContent>
 
-            {/* Vendor Tab */}
             <TabsContent value="vendor" className="space-y-4">
               <div>
                 <Label className="flex items-center gap-1.5 text-sm font-medium text-gray-700">
@@ -539,7 +535,6 @@ export default function EditItemModal({
               </div>
             </TabsContent>
 
-            {/* Additional Info Tab */}
             <TabsContent value="additional" className="space-y-4">
               <div>
                 <Label

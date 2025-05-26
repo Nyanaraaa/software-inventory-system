@@ -4,15 +4,15 @@ import prisma from "@/lib/prisma"
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const query = searchParams.get("query") || ""
-  const status = searchParams.get("status") // Get status from query params
+  const status = searchParams.get("status") 
   const page = Number.parseInt(searchParams.get("page") || "1")
   const itemsPerPage = 10
 
   try {
-    // Calculate pagination
+    
     const skip = (page - 1) * itemsPerPage
 
-    // Build filter conditions
+    
     const where: any = {}
     if (query) {
       where.OR = [
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
       where.status = status
     }
 
-    // Get vendors with pagination
+    
     const vendors = await prisma.vendor.findMany({
       where,
       orderBy: { name: "asc" },
@@ -33,12 +33,12 @@ export async function GET(request: Request) {
       take: itemsPerPage,
       include: {
         items: {
-          select: { name: true }, // Only fetch item names
+          select: { name: true }, 
         },
       },
     })
 
-    // Get total count for pagination
+    
     const totalCount = await prisma.vendor.count({ where })
 
     return NextResponse.json({
@@ -56,18 +56,18 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
 
-    // Validate required fields
+    
     if (!body.name) {
       return NextResponse.json({ error: "Vendor name is required" }, { status: 400 })
     }
 
-    // Create new vendor
+    
     const vendor = await prisma.vendor.create({
       data: {
         name: body.name,
         contact: body.contact || null,
         email: body.email || null,
-        status: body.status || "ACTIVE", // <-- Add this line
+        status: body.status || "ACTIVE", 
       },
     })
 
@@ -90,7 +90,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Vendor name is required" }, { status: 400 })
     }
 
-    // Update vendor
+    
     const vendor = await prisma.vendor.update({
       where: { id: Number(body.id) },
       data: {

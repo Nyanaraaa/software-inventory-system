@@ -27,7 +27,6 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
     const fetchData = async () => {
       try {
         setLoading(true)
-        // Fetch vendor details with the item
         const res = await getItem(id)
         setData(res)
         setError(null)
@@ -206,7 +205,6 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
                   </div>
                   <div className="flex items-center gap-2">
                     <p className="font-medium text-gray-900">{formatDate(data.expirationDate)}</p>
-                    {/* Status Badge for Active/Inactive based on backend `archived` value */}
                     {typeof data?.archived === "boolean" && (
                       <Badge
                         variant={data.archived ? "destructive" : "default"}

@@ -17,14 +17,14 @@ export async function createItem(data: {
     licenseKeys: string[];
     numberOfLicenses?: number;
     requisitionNumber?: string;
-    vendorId?: string | number; // <-- Add this line
+    vendorId?: string | number; 
 }) {
     const { licenseKeys, vendorId, ...itemData } = data;
 
     const item = await prisma.item.create({
         data: {
             ...itemData,
-            vendorId: vendorId ? Number(vendorId) : undefined, // <-- Insert vendorId
+            vendorId: vendorId ? Number(vendorId) : undefined, 
             licenseKeys: {
                 create: licenseKeys.map((key) => ({
                     key,
@@ -44,7 +44,7 @@ const getItems = async (offset = 0, limit = 10) => {
     orderBy: { id: "desc" },
     include: {
       licenseKeys: true,
-      vendor: true, // <-- include vendor relation
+      vendor: true,
     },
   });
 };
@@ -56,8 +56,8 @@ const getExpiringItems = async () => {
     return prisma.item.findMany({
         where: {
             expirationDate: {
-                gte: now,      // Only items expiring in the future
-                lte: oneMonth, // ...and within the next 30 days
+                gte: now,      
+                lte: oneMonth, 
             },
         },
         orderBy: {
@@ -93,7 +93,7 @@ const getItem = async (id: number) => {
     where: { id },
     include: {
       licenseKeys: true,
-      vendor: true, // <-- ensure vendor relation is included
+      vendor: true, 
     },
   });
 };
@@ -106,7 +106,7 @@ const updateItem = async (id: number, data: any) => {
     where: { id },
     data: {
       ...itemData,
-      vendorId: vendorId ? Number(vendorId) : null, // <-- update vendorId
+      vendorId: vendorId ? Number(vendorId) : null, 
       licenseKeys: licenseKeys
         ? {
             deleteMany: {},
@@ -122,7 +122,7 @@ const archiveItem = async (ids: number[]) => {
     return prisma.item.updateMany({
         where: {
             id: {
-                in: ids, // Match any of the provided IDs
+                in: ids, 
             },
         },
         data: {
@@ -135,7 +135,7 @@ const unarchiveItem = async (ids: number[]) => {
     return prisma.item.updateMany({
         where: {
             id: {
-                in: ids, // Match any of the provided IDs
+                in: ids, 
             },
         },
         data: {
@@ -177,12 +177,12 @@ const getLifetimeProductsCount = async () => {
 };
 
 export const renewItem = async (id: number, data: ItemUpdate) => {
-  // Update the item
+
   await prisma.item.update({
     where: { id },
     data,
   });
-  // Log the renewal
+ 
   await prisma.renewal.create({
     data: {
       itemId: id,
@@ -221,7 +221,6 @@ export const getRecentlyRenewedItems = async (opts?: { all?: boolean }) => {
       include: { item: true },
     });
 
-    // Deduplicate by itemId, keeping only the most recent renewal per item
     const seen = new Set();
     const uniqueRenewals = [];
     for (const renewal of renewals) {
@@ -235,7 +234,6 @@ export const getRecentlyRenewedItems = async (opts?: { all?: boolean }) => {
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  // Get the latest renewal for each item in the last 30 days
   const renewals = await prisma.renewal.findMany({
     where: {
       renewedAt: {
@@ -246,8 +244,8 @@ export const getRecentlyRenewedItems = async (opts?: { all?: boolean }) => {
     orderBy: [
       { renewedAt: "desc" }
     ],
-    distinct: ["itemId"], // Only the latest renewal per item
-    take: 5, // Limit to 5 items
+    distinct: ["itemId"], 
+    take: 5, 
     include: { item: true },
   });
 
@@ -306,6 +304,6 @@ export {
     getExpiringItemsCount,
     getLifetimeProductsCount,
     getExpiredItemsCount,
-    getExpiredProducts, // <-- add this line
+    getExpiredProducts, 
 };
 

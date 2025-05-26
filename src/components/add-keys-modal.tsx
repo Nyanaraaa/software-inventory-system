@@ -71,7 +71,6 @@ export default function AddKeysModal({ open, onClose, onSuccess }: Props) {
       setProductId(null)
       setStatus("active")
       if (onSuccess) onSuccess()
-      // Wait 1 second before closing the modal so the success message is visible
       setTimeout(() => {
         onClose()
         setSuccess(false)

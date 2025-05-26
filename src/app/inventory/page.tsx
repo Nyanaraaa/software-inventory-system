@@ -11,14 +11,14 @@ import * as XLSX from "xlsx"
 import { Dialog } from "@headlessui/react"
 import { ChevronDown, ChevronRight as ChevronRightIcon } from "lucide-react"
 
-// Import components
+
 import CreateItemModal from "@/components/add-item-modal";
 import EditItemModal from "@/components/edit-item-modal";
 import DetailsModal from "@/components/item-details-modal";
 import LicenseKeysModal from "@/components/license-keys-modal";
 import RenewModal from "@/components/renew-modal";
 
-// Import icons
+
 import {
   ArrowLeft,
   Download,
@@ -157,7 +157,7 @@ export default function HomeContent() {
         attachment: item.attachment,
         description: item.description,
         type: item.type,
-        archived: item.archived ? "Yes" : "No", // <-- Add archive column
+        archived: item.archived ? "Yes" : "No", 
       }))
 
     if (hardwareReport.length === 0) {
@@ -187,7 +187,7 @@ export default function HomeContent() {
         attachment: item.attachment,
         description: item.description,
         type: item.type,
-        archived: item.archived ? "Yes" : "No", // <-- Add archive column
+        archived: item.archived ? "Yes" : "No", 
       }))
 
     if (softwareReport.length === 0) {
@@ -266,7 +266,7 @@ export default function HomeContent() {
     setCurrentPage(1)
   }
 
-  // Scroll to bottom handler
+  
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const handleScrollToBottom = () => {
     if (tableContainerRef.current) {
@@ -277,7 +277,7 @@ export default function HomeContent() {
     }
   }
 
-  // Scroll to right handler
+  
   const handleScrollToRight = () => {
     if (tableContainerRef.current) {
       tableContainerRef.current.scrollTo({
@@ -332,10 +332,9 @@ export default function HomeContent() {
   const totalPages = Math.ceil(displayData.length / itemsPerPage)
 
   const exportAllData = () => {
-    // Combine both active and archived items for a full export
+  
     const allItems = [...data, ...archivedData];
 
-    // Separate hardware and software items
     const hardwareRows = allItems
       .filter((item) => item.type === "HARDWARE")
       .map((item) => ({
@@ -396,7 +395,6 @@ export default function HomeContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header with back button */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <a
@@ -409,9 +407,7 @@ export default function HomeContent() {
         </div>
       </div>
 
-      {/* Main content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Table Settings Dialog */}
         <Dialog
           open={isCustomizationOpen}
           onClose={() => setIsCustomizationOpen(false)}
@@ -446,7 +442,6 @@ export default function HomeContent() {
           </div>
         </Dialog>
 
-        {/* Renew Modal */}
         <RenewModal
           open={isRenewModalOpen}
           onClose={() => setIsRenewModalOpen(false)}
@@ -460,7 +455,6 @@ export default function HomeContent() {
           onConfirm={handleConfirmRenew}
         />
 
-        {/* Toolbar */}
         <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
           <div className="relative w-full sm:w-[400px] max-w-lg"> {/* changed from sm:w-auto max-w-md to sm:w-[400px] max-w-lg */}
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -566,9 +560,7 @@ export default function HomeContent() {
           </div>
         </div>
 
-        {/* Table */}
         <div className="bg-white overflow-hidden shadow-sm rounded-lg border relative">
-          {/* Scroll to bottom button */}
           <button
             onClick={handleScrollToBottom}
             className="absolute right-4 top-4 z-20 bg-gray-900 text-white rounded-full p-2 shadow hover:bg-gray-700 transition"
@@ -577,7 +569,6 @@ export default function HomeContent() {
           >
             <ChevronDown className="h-5 w-5" />
           </button>
-          {/* Scroll to right button - middle right edge */}
           <button
             onClick={handleScrollToRight}
             className="absolute top-1/2 right-0 -translate-y-1/2 z-20 bg-gray-900 text-white rounded-full p-2 shadow hover:bg-gray-700 transition"
@@ -782,7 +773,6 @@ export default function HomeContent() {
             </table>
           </div>
 
-          {/* Pagination */}
           {displayData.length > 0 && (
             <div className="px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
               <div className="flex-1 flex justify-between sm:hidden">
@@ -826,7 +816,6 @@ export default function HomeContent() {
                       <ChevronLeft className="h-5 w-5" aria-hidden="true" />
                     </Button>
 
-                    {/* Page numbers */}
                     {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                       let pageNum
                       if (totalPages <= 5) {

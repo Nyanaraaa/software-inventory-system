@@ -16,13 +16,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Building2, Phone, Mail, CheckCircle2, AlertCircle, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { createVendor } from "@/actions/vendors" // Import your backend function
-import { toast } from "sonner" // If you use sonner for notifications
+import { createVendor } from "@/actions/vendors" 
+import { toast } from "sonner" 
 
 export default function AddVendorModal({
   open,
   onClose,
-  itemId, // Pass itemId if you want to link vendor to an item
+  itemId, 
 }: {
   open: boolean
   onClose: () => void
@@ -82,7 +82,6 @@ export default function AddVendorModal({
       setContact("")
       setEmail("")
       setErrors({})
-      // Optionally close after a delay
       setTimeout(() => {
         setSuccess(false)
         onClose()

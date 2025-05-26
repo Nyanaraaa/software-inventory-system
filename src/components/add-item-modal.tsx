@@ -46,13 +46,13 @@ export default function CreateItemModal({
     expirationDate: undefined as Date | undefined,
     subscriptionDate: undefined as Date | undefined,
     purchaseDate: undefined as Date | undefined,
-    category: "software", // Default to software
+    category: "software", 
     attachment: "",
     ownerEmail: "",
     productDescription: "",
     licenseKeys: [] as string[],
     requisitionNumber: "",
-    vendorId: "", // <-- Add this line
+    vendorId: "", 
   })
   const [licenseKeyInputs, setLicenseKeyInputs] = useState<string[]>([""])
   const [isLifetime, setIsLifetime] = useState(false)
@@ -90,7 +90,6 @@ export default function CreateItemModal({
       errors.ownerEmail = "Please enter a valid email address"
     }
 
-    // Subscription date is now required for software
     if (data.category === "software" && !data.subscriptionDate) {
       errors.subscriptionDate = "Subscription date is required"
     }
@@ -125,7 +124,7 @@ export default function CreateItemModal({
       licenseKeys,
       numberOfLicenses: licenseKeys.length,
       requisitionNumber: data.requisitionNumber,
-      vendorId: data.vendorId ? Number(data.vendorId) : undefined, // <-- Pass vendorId
+      vendorId: data.vendorId ? Number(data.vendorId) : undefined, 
     })
 
     // Reset form
@@ -367,7 +366,7 @@ export default function CreateItemModal({
                           setIsLifetime(checked)
                           if (checked) {
                             setData({ ...data, expirationDate: undefined })
-                            // Clear expiration date error if it exists
+                          
                             if (formErrors.expirationDate) {
                               const { expirationDate, ...rest } = formErrors
                               setFormErrors(rest)
@@ -464,7 +463,6 @@ export default function CreateItemModal({
                 )}
               </TabsContent>
 
-              {/* Vendor Tab */}
               <TabsContent value="vendor" className="space-y-4">
                 <div>
                   <Label className="flex items-center gap-1.5 text-sm font-medium text-gray-700">
@@ -477,7 +475,7 @@ export default function CreateItemModal({
                       setSelectedVendor(vendor)
                       setData((prev) => ({
                         ...prev,
-                        vendorId: vendor && vendor.id ? vendor.id : undefined, // Only set if valid
+                        vendorId: vendor && vendor.id ? vendor.id : undefined, 
                       }))
                     }}
                   >
@@ -526,7 +524,6 @@ export default function CreateItemModal({
                 </div>
               </TabsContent>
 
-              {/* Additional Info Tab */}
               <TabsContent value="additional" className="space-y-4">
                 <div>
                   <Label

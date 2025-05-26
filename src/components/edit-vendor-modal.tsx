@@ -67,9 +67,7 @@ export default function EditVendorModal({ open, onClose, vendor, onSave }: EditV
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedVendor),
     })
-    // Optionally close modal and refresh list
     onClose()
-    // fetchVendors(); // or reload the page/list
   }
 
   return (
