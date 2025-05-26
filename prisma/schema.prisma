@@ -13,8 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Vendor {
+  id      Int    @id @default(autoincrement())
+  name    String
+  contact String
+  email   String
+  status  String @default("ACTIVE") // <-- Change to String
+  items   Item[] // One vendor to many items
+}
+
 model Item {
-  id               Int       @id @default(autoincrement())
+  id               Int           @id @default(autoincrement())
   name             String
   description      String
   owner            String
@@ -25,11 +34,24 @@ model Item {
   attachment       String
   itemType         ItemType
   lastReminder     DateTime?
-  licenseKey       String?
   numberOfLicenses Int?
   requisitionNumber String?
-  archived         Boolean   @default(false) // Flag to mark if the item is archived
-  createdAt        DateTime  @default(now())
+  archived         Boolean       @default(false)
+  createdAt        DateTime      @default(now())
+  licenseKeys      LicenseKey[]  // Relation to LicenseKey table
+  renewals         Renewal[]     // Relation to Renewal table
+  vendorId         Int?          // Foreign key to Vendor
+  vendor           Vendor?       @relation(fields: [vendorId], references: [id])
+}
+
+model LicenseKey {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  status    String   @default("active") // "active" or "inactive"
+  itemId    Int
+  item      Item     @relation(fields: [itemId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum ItemType {
@@ -46,4 +68,11 @@ model Token {
   updatedAt   DateTime @updatedAt // Last updated time
   
   @@index([tokenValue])  // Index on the token value for quick lookup
+}
+
+model Renewal {
+  id        Int      @id @default(autoincrement())
+  item      Item     @relation(fields: [itemId], references: [id])
+  itemId    Int
+  renewedAt DateTime @default(now())
 }
