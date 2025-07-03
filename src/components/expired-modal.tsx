@@ -123,7 +123,7 @@ export default function ExpiredProductsModal() {
         <span>View expired products</span>
       </Button>
 
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
           <div className="flex flex-col">
             <DialogTitle className="text-xl flex items-center gap-2">

@@ -13,15 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Vendor {
-  id      Int    @id @default(autoincrement())
-  name    String
-  contact String
-  email   String
-  status  String @default("ACTIVE") // <-- Change to String
-  items   Item[] // One vendor to many items
-}
-
 model Item {
   id               Int           @id @default(autoincrement())
   name             String
@@ -38,20 +29,36 @@ model Item {
   requisitionNumber String?
   archived         Boolean       @default(false)
   createdAt        DateTime      @default(now())
-  licenseKeys      LicenseKey[]  // Relation to LicenseKey table
-  renewals         Renewal[]     // Relation to Renewal table
-  vendorId         Int?          // Foreign key to Vendor
+  licenseKeys      LicenseKey[]  
+  renewals         Renewal[]     
+  vendorId         Int?          
   vendor           Vendor?       @relation(fields: [vendorId], references: [id])
 }
 
 model LicenseKey {
   id        Int      @id @default(autoincrement())
   key       String   @unique
-  status    String   @default("active") // "active" or "inactive"
+  status    String   @default("active") 
   itemId    Int
   item      Item     @relation(fields: [itemId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Renewal {
+  id        Int      @id @default(autoincrement())
+  item      Item     @relation(fields: [itemId], references: [id])
+  itemId    Int
+  renewedAt DateTime @default(now())
+}
+
+model Vendor {
+  id      Int    @id @default(autoincrement())
+  name    String
+  contact String
+  email   String
+  status  String @default("ACTIVE") 
+  items   Item[] 
 }
 
 enum ItemType {
@@ -60,19 +67,12 @@ enum ItemType {
 }
 
 model Token {
-  id          Int      @id @default(autoincrement())  // Token ID
-  tokenValue  String   @unique // Mark this field as unique
-  expiresAt   DateTime // Expiration time of the token
-  revoked     Boolean  @default(false) // Flag to mark token as revoked
-  createdAt   DateTime @default(now()) // Creation time
-  updatedAt   DateTime @updatedAt // Last updated time
+  id          Int      @id @default(autoincrement())  
+  tokenValue  String   @unique 
+  expiresAt   DateTime 
+  revoked     Boolean  @default(false) 
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   
-  @@index([tokenValue])  // Index on the token value for quick lookup
-}
-
-model Renewal {
-  id        Int      @id @default(autoincrement())
-  item      Item     @relation(fields: [itemId], references: [id])
-  itemId    Int
-  renewedAt DateTime @default(now())
+  @@index([tokenValue])
 }
