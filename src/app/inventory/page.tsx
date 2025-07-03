@@ -2,22 +2,18 @@
 
 import { useRef, useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
-import { getItems, archiveItem, unarchiveItem, renewItem } from "@/actions/items";
-import { truncate } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import type { DisplayedItems } from "@/lib/types";
+import { getItems, archiveItem, unarchiveItem, renewItem } from "@/actions/items"
+import { truncate } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import type { DisplayedItems } from "@/lib/types"
 import * as XLSX from "xlsx"
 import { Dialog } from "@headlessui/react"
-import { ChevronDown, ChevronRight as ChevronRightIcon } from "lucide-react"
-
-
-import CreateItemModal from "@/components/add-item-modal";
-import EditItemModal from "@/components/edit-item-modal";
-import DetailsModal from "@/components/item-details-modal";
-import LicenseKeysModal from "@/components/license-keys-modal";
-import RenewModal from "@/components/renew-modal";
-
+import { ChevronDown, ChevronRightIcon } from "lucide-react"
+import EditItemModal from "@/components/edit-item-modal"
+import DetailsModal from "@/components/item-details-modal"
+import LicenseKeysModal from "@/components/license-keys-modal"
+import RenewModal from "@/components/renew-modal"
 
 import {
   ArrowLeft,
@@ -60,6 +56,8 @@ export default function HomeContent() {
   const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState("")
   const itemsPerPage = 20
+  const [isTableScrollable, setIsTableScrollable] = useState(false)
+  const [isTableHovered, setIsTableHovered] = useState(false)
 
   const fields = [
     { key: "name", label: "Product Name" },
@@ -125,9 +123,9 @@ export default function HomeContent() {
 
   const handleSelectAll = (isChecked: boolean) => {
     if (isChecked) {
-      setSelectedRows(displayData.map((item) => item.id));
+      setSelectedRows(displayData.map((item) => item.id))
     } else {
-      setSelectedRows([]);
+      setSelectedRows([])
     }
   }
 
@@ -157,7 +155,7 @@ export default function HomeContent() {
         attachment: item.attachment,
         description: item.description,
         type: item.type,
-        archived: item.archived ? "Yes" : "No", 
+        archived: item.archived ? "Yes" : "No",
       }))
 
     if (hardwareReport.length === 0) {
@@ -187,7 +185,7 @@ export default function HomeContent() {
         attachment: item.attachment,
         description: item.description,
         type: item.type,
-        archived: item.archived ? "Yes" : "No", 
+        archived: item.archived ? "Yes" : "No",
       }))
 
     if (softwareReport.length === 0) {
@@ -266,7 +264,6 @@ export default function HomeContent() {
     setCurrentPage(1)
   }
 
-  
   const tableContainerRef = useRef<HTMLDivElement>(null)
   const handleScrollToBottom = () => {
     if (tableContainerRef.current) {
@@ -277,7 +274,6 @@ export default function HomeContent() {
     }
   }
 
-  
   const handleScrollToRight = () => {
     if (tableContainerRef.current) {
       tableContainerRef.current.scrollTo({
@@ -332,66 +328,74 @@ export default function HomeContent() {
   const totalPages = Math.ceil(displayData.length / itemsPerPage)
 
   const exportAllData = () => {
-  
-    const allItems = [...data, ...archivedData];
+    const allItems = [...data, ...archivedData]
 
     const hardwareRows = allItems
       .filter((item) => item.type === "HARDWARE")
       .map((item) => ({
         "Product Name": item.name,
-        "Owner": item.owner,
+        Owner: item.owner,
         "Owner Email": item.ownerEmail || "",
         "License Key": item.licenseKeys?.map((key: any) => key.key).join(", ") || "",
         "Number of Licenses": item.numberOfLicenses ?? "",
         "Requisition Number": item.requisitionNumber ?? "",
-        "Attachment": item.attachment ?? "",
-        "Description": item.description ?? "",
+        Attachment: item.attachment ?? "",
+        Description: item.description ?? "",
         "Purchase Date": item.purchaseDate ? item.purchaseDate.toLocaleDateString() : "",
-        "Expiration": item.expirationDate
-          ? item.expirationDate.toLocaleDateString()
-          : "",
-        "Type": item.type,
-        "Archived": item.archived ? "Yes" : "No",
-      }));
+        Expiration: item.expirationDate ? item.expirationDate.toLocaleDateString() : "",
+        Type: item.type,
+        Archived: item.archived ? "Yes" : "No",
+      }))
 
     const softwareRows = allItems
       .filter((item) => item.type === "SOFTWARE")
       .map((item) => ({
         "Product Name": item.name,
-        "Owner": item.owner,
+        Owner: item.owner,
         "Owner Email": item.ownerEmail || "",
         "License Key": item.licenseKeys?.map((key: any) => key.key).join(", ") || "",
         "Number of Licenses": item.numberOfLicenses ?? "",
         "Requisition Number": item.requisitionNumber ?? "",
-        "Attachment": item.attachment ?? "",
-        "Description": item.description ?? "",
+        Attachment: item.attachment ?? "",
+        Description: item.description ?? "",
         "Subscription Date": item.subscriptionDate ? item.subscriptionDate.toLocaleDateString() : "",
-        "Expiration": item.expirationDate
-          ? item.expirationDate.toLocaleDateString()
-          : "Lifetime",
-        "Type": item.type,
-        "Archived": item.archived ? "Yes" : "No",
-      }));
+        Expiration: item.expirationDate ? item.expirationDate.toLocaleDateString() : "Lifetime",
+        Type: item.type,
+        Archived: item.archived ? "Yes" : "No",
+      }))
 
     if (hardwareRows.length === 0 && softwareRows.length === 0) {
-      alert("No items found to export.");
-      return;
+      alert("No items found to export.")
+      return
     }
 
-    const workbook = XLSX.utils.book_new();
+    const workbook = XLSX.utils.book_new()
 
     if (hardwareRows.length > 0) {
-      const hardwareSheet = XLSX.utils.json_to_sheet(hardwareRows);
-      XLSX.utils.book_append_sheet(workbook, hardwareSheet, "Hardware");
+      const hardwareSheet = XLSX.utils.json_to_sheet(hardwareRows)
+      XLSX.utils.book_append_sheet(workbook, hardwareSheet, "Hardware")
     }
 
     if (softwareRows.length > 0) {
-      const softwareSheet = XLSX.utils.json_to_sheet(softwareRows);
-      XLSX.utils.book_append_sheet(workbook, softwareSheet, "Software");
+      const softwareSheet = XLSX.utils.json_to_sheet(softwareRows)
+      XLSX.utils.book_append_sheet(workbook, softwareSheet, "Software")
     }
 
-    XLSX.writeFile(workbook, "All_Inventory.xlsx");
-  };
+    XLSX.writeFile(workbook, "All_Inventory.xlsx")
+  }
+
+  useEffect(() => {
+    const checkScrollable = () => {
+      if (tableContainerRef.current) {
+        const { scrollWidth, clientWidth } = tableContainerRef.current
+        setIsTableScrollable(scrollWidth > clientWidth)
+      }
+    }
+
+    checkScrollable()
+    window.addEventListener("resize", checkScrollable)
+    return () => window.removeEventListener("resize", checkScrollable)
+  }, [displayData, selectedFields])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -456,7 +460,9 @@ export default function HomeContent() {
         />
 
         <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
-          <div className="relative w-full sm:w-[400px] max-w-lg"> {/* changed from sm:w-auto max-w-md to sm:w-[400px] max-w-lg */}
+          <div className="relative w-full sm:w-[400px] max-w-lg">
+            {" "}
+            {/* changed from sm:w-auto max-w-md to sm:w-[400px] max-w-lg */}
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search by name, owner or email..."
@@ -499,8 +505,8 @@ export default function HomeContent() {
                   </button>
                   <button
                     onClick={() => {
-                      exportAllData();
-                      setShowExportOptions(false);
+                      exportAllData()
+                      setShowExportOptions(false)
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
@@ -560,28 +566,42 @@ export default function HomeContent() {
           </div>
         </div>
 
-        <div className="bg-white overflow-hidden shadow-sm rounded-lg border relative">
-          <button
-            onClick={handleScrollToBottom}
-            className="absolute right-4 top-4 z-20 bg-gray-900 text-white rounded-full p-2 shadow hover:bg-gray-700 transition"
-            title="Scroll to bottom"
-            style={{ display: paginatedData.length > 10 ? "block" : "none" }}
-          >
-            <ChevronDown className="h-5 w-5" />
-          </button>
+        <div
+          className="bg-white overflow-hidden shadow-sm rounded-lg border relative"
+          onMouseEnter={() => setIsTableHovered(true)}
+          onMouseLeave={() => setIsTableHovered(false)}
+        >
           <button
             onClick={handleScrollToRight}
-            className="absolute top-1/2 right-0 -translate-y-1/2 z-20 bg-gray-900 text-white rounded-full p-2 shadow hover:bg-gray-700 transition"
+            className={`absolute top-1/2 right-2 -translate-y-1/2 z-20 bg-gray-900 text-white rounded-full p-2 shadow hover:bg-gray-700 transition-all duration-200 ${
+              isTableScrollable && isTableHovered ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
             title="Scroll to right"
-            style={{ display: "block" }}
           >
             <ChevronRightIcon className="h-5 w-5" />
           </button>
-          <div
-            className="overflow-x-auto max-h-[80vh] scroll-smooth"
-            ref={tableContainerRef}
+          <button
+            onClick={() => {
+              if (tableContainerRef.current) {
+                tableContainerRef.current.scrollTo({
+                  left: 0,
+                  behavior: "smooth",
+                })
+              }
+            }}
+            className={`absolute top-1/2 left-2 -translate-y-1/2 z-20 bg-gray-900 text-white rounded-full p-2 shadow hover:bg-gray-700 transition-all duration-200 ${
+              isTableScrollable && isTableHovered ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+            title="Scroll to left"
           >
-            <table className="min-w-full divide-y divide-gray-200">
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <div
+            className="overflow-x-auto overflow-y-auto max-h-[80vh] scroll-smooth"
+            ref={tableContainerRef}
+            style={{ minWidth: "100%" }}
+          >
+            <table className="w-full divide-y divide-gray-200" style={{ minWidth: "1200px" }}>
               <thead className="bg-gray-50 sticky top-0 z-10">
                 <tr>
                   <th scope="col" className="px-3 py-3.5 text-left bg-gray-50">
@@ -592,8 +612,7 @@ export default function HomeContent() {
                         className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-500"
                         onChange={(e) => handleSelectAll(e.target.checked)}
                         checked={
-                          paginatedData.length > 0 &&
-                          paginatedData.every((item) => selectedRows.includes(item.id))
+                          paginatedData.length > 0 && paginatedData.every((item) => selectedRows.includes(item.id))
                         }
                       />
                       <label htmlFor="checkbox-all" className="sr-only">
@@ -641,7 +660,10 @@ export default function HomeContent() {
 
                       {selectedFields.includes("name") && (
                         <td className="px-3 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{truncate(item.name, 30)}</div>
+                          <div className="flex items-center space-x-2">
+                            <DetailsModal id={item.id} />
+                            <div className="text-sm font-medium text-gray-900">{truncate(item.name, 30)}</div>
+                          </div>
                         </td>
                       )}
 
@@ -750,10 +772,7 @@ export default function HomeContent() {
                             Renew
                           </Button>
 
-                          <div className="flex space-x-1">
-                            <EditItemModal id={item.id} updateData={updateData} />
-                            <DetailsModal id={item.id} />
-                          </div>
+                          <EditItemModal id={item.id} updateData={updateData} />
                         </div>
                       </td>
                     </tr>

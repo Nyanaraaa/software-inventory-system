@@ -8,19 +8,25 @@ import { cn } from "@/lib/utils"
 
 import { useState } from "react"
 
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 import type React from "react"
 
-import { Clock, Database, LayoutDashboard, Users, Key } from "lucide-react"
+import { Clock, Database, LayoutDashboard, Users, Key, LogOut } from "lucide-react"
 import CreateItemModal from "@/components/add-item-modal"
 import AddKeysModal from "@/components/add-keys-modal"
 import AddVendorModal from "@/components/add-vendor-modal"
 
 export function SideNav({ className }: React.HTMLAttributes<HTMLElement>) {
   const pathname = usePathname()
+  const router = useRouter()
   const [isAddKeysOpen, setIsAddKeysOpen] = useState(false)
   const [isAddVendorOpen, setIsAddVendorOpen] = useState(false)
+
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "POST" })
+    router.push("/login")
+  }
 
   return (
     <nav className={cn("flex flex-col space-y-1 border-r bg-background p-4", className)}>
@@ -88,6 +94,18 @@ export function SideNav({ className }: React.HTMLAttributes<HTMLElement>) {
 
           <AddVendorModal open={isAddVendorOpen} onClose={() => setIsAddVendorOpen(false)} />
         </div>
+      </div>
+      <div className="flex-1" />
+
+      <div className="pt-4 border-t">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+          onClick={handleLogout}
+        >
+          <LogOut className="mr-2 h-5 w-5" />
+          Logout
+        </Button>
       </div>
     </nav>
   )

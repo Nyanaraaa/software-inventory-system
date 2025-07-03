@@ -55,12 +55,10 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
     const now = new Date()
     const expDate = new Date(expirationDate)
     
-    // If expired
     if (expDate < now) {
       return { label: "Expired", variant: "destructive" as const }
     }
     
-    // If expiring within 30 days
     const thirtyDaysFromNow = new Date()
     thirtyDaysFromNow.setDate(now.getDate() + 30)
     if (expDate < thirtyDaysFromNow) {
@@ -84,7 +82,7 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[800px] max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center gap-2">
             {loading ? (
@@ -139,7 +137,6 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
           </div>
         ) : data ? (
           <div className="space-y-6">
-            {/* Basic Information */}
             <div className="bg-gray-50 rounded-lg p-4 border">
               <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Basic Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -174,7 +171,6 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
               </div>
             </div>
 
-            {/* Dates & Status */}
             <div className="bg-gray-50 rounded-lg p-4 border">
               <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Dates & Status</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -222,7 +218,6 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
               </div>
             </div>
 
-            {/* License Information (for Software) */}
             {data.itemType === "SOFTWARE" && (
               <div className="bg-gray-50 rounded-lg p-4 border">
                 <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">License Information</h3>
@@ -257,7 +252,6 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
               </div>
             )}
 
-            {/* Vendor Information */}
             <div className="bg-gray-50 rounded-lg p-4 border">
               <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <Building2 className="h-4 w-4" />
@@ -292,7 +286,6 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
               )}
             </div>
 
-            {/* Description */}
             <div className="bg-gray-50 rounded-lg p-4 border">
               <div className="flex items-center text-sm text-gray-500 mb-2">
                 <FileText className="h-4 w-4 mr-2" />
@@ -301,7 +294,6 @@ export default function DetailsModal({ id, children }: { id: number; children?: 
               <p className="text-gray-900 whitespace-pre-wrap">{data.description || "No description provided."}</p>
             </div>
 
-            {/* Attachment */}
             {data.attachment && (
               <div className="bg-gray-50 rounded-lg p-4 border">
                 <div className="flex items-center text-sm text-gray-500 mb-2">
